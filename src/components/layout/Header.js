@@ -19,7 +19,7 @@ class Header extends Component {
         if (isAuthenticated) {
             links = (
                 <>  
-                    <Link className = 'nav-item nav-link' to = '/login'>
+                    <Link className = 'nav-item nav-link' to = '/add-post'>
                         <i className = 'fas fa-plus'></i> Add Post
                     </Link>
                     <span className = 'nav-item nav-link mr-3'>
@@ -45,7 +45,7 @@ class Header extends Component {
         }
 
         return (
-            <nav className = 'navbar navbar-expand-lg navbar-dark bg-dark'>
+            <nav className = 'navbar navbar-expand-md navbar-dark bg-dark'>
                 <Link className = 'navbar-brand' to = '/'>
                     <img alt = 'logo' src = { this.props.logo } width = '24px' /> upso
                 </Link>        

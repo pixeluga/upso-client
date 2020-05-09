@@ -3,6 +3,7 @@ import jwtDecode from 'jwt-decode';
 import { SET_CURRENT_USER } from './types';
 import setAuthToken from '../utils/setAuthToken';
 import api from '../api';
+import { setError } from './posts';
 
 // Sync
 export const setCurrentUser = (user) => ({
@@ -11,13 +12,13 @@ export const setCurrentUser = (user) => ({
 });
 
 // Async
-export const register = (userData, history) => async () => {
+export const register = (userData, history) => async (dispatch) => {
   try {
     await api.register(userData);
 
     history.push('/login');
   } catch (e) {
-    console.log(`😱 Axios request REGISTER failed: ${e}`);
+    dispatch(setError(e));
   }  
 };
 
@@ -33,7 +34,7 @@ export const login = (userData, history) => async (dispatch) => {
     
     history.push('/');
   } catch (e) {
-    console.log(`😱 Axios request LOGIN failed: ${e}`);
+    dispatch(setError(e));
   }
 }
 
