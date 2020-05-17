@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-// const API_ROOT = 'https://pxl-upso-back.herokuapp.com/';
+// const API_ROOT = 'https://pxl-upso-back.herokuapp.com';
 const API_ROOT = 'http://localhost:8080';
 
 const responseData = (res) => res.data;
@@ -22,8 +22,10 @@ export default {
   },
 
   getPost: async (id) => {
-    const res = await axios.get(`${API_ROOT}/api/posts/${id}`);
-    return responseData(res);
+    const postRes = await axios.get(`${API_ROOT}/api/posts/${id}`);
+    const commentsRes = await axios.get(`${API_ROOT}/api/posts/${id}/comments`);
+    const posts = { ...postRes.data, comments: commentsRes.data }
+    return posts;
   },
 
   createPost: async (post) => {
@@ -38,6 +40,16 @@ export default {
 
   updatePost: async (post) => {
     const res = await axios.put(`${API_ROOT}/api/posts`, post);
+    return responseData(res);
+  },
+
+  createComment: async (postId, comment) => {
+    const res = await axios.post(`${API_ROOT}/api/posts/${postId}/comments`, comment);
+    return responseData(res);
+  },
+
+  getCommentsThread: async (id, _id) => {
+    const res = await axios.get(`${API_ROOT}/api/posts/${id}/comments/${_id}`);
     return responseData(res);
   },
 };

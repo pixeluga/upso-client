@@ -9,11 +9,13 @@ import {
   EMIT_MESSAGE,
   EMIT_ERROR,
   CLEAN_ERROR,
+
+  UPDATE_COMMENTS,
 } from '../actions/types'
 
 const defaultState = {
   postsArray: [],
-  post: '',
+  post: {},
   isLoading: false,
 };
 
@@ -28,7 +30,7 @@ export default (state = defaultState, action) => {
       return {
         ...state,
         postsArray: [],
-        totalCount: 0
+        total: 0
       }
     case FETCH_POSTS:
       return {
@@ -52,6 +54,14 @@ export default (state = defaultState, action) => {
         ...state,
         post: action.payload,
         postsArray: [], // Posts - is another page, which will load all posts from server anyway
+      };
+    case UPDATE_COMMENTS:
+      return {
+        ...state,
+        post: {
+          ...state.post,
+          comments: [action.payload, ...state.post.comments],
+        },
       };
     case CLEAR_POST:
       return {

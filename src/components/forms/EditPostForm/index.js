@@ -32,7 +32,15 @@ class EditPostForm extends Component {
     const prevPost = prevProps.posts.post;
     const post = this.props.posts.post;
 
+    // console.log('prevPost', prevPost);
+    // console.log('post', post);
+    // console.log('--->', prevPost.title !== post.title)
+
     if (post && post._id && prevPost.title !== post.title ) {
+      // console.log('prevPost', prevPost);
+      // console.log('post', post);
+      // console.log('--->', prevPost.title !== post.title)
+
       this.setState({
         title: post.title,
         body: post.body
@@ -83,6 +91,7 @@ class EditPostForm extends Component {
               className = 'form-control'
               type = 'text'      
               value = { this.state.title }
+              placeholder = 'Your title'
               onChange = { this.onChangeTitle } 
             />
           </div>

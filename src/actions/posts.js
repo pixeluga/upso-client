@@ -9,9 +9,13 @@ import {
   DELETE_POST,
   UPDATE_POST,
   CLEAR_POST,
+
   EMIT_ERROR,
   CLEAN_ERROR,
   EMIT_MESSAGE,
+
+  FILL_COMMENTS,
+  UPDATE_COMMENTS,
 } from '../actions/types'
 
 // Sync
@@ -76,6 +80,25 @@ export const setMessage = (message) => ({
   type: EMIT_MESSAGE,
   payload: message,
 });
+
+export const addComment = (comment) => ({
+  type: UPDATE_POST,
+  payload: comment,
+});
+
+export const fillComments = (data) => ({
+  type: FILL_COMMENTS, 
+  payload: data,
+});
+
+export const updatePostComments = (comment) => (dispatch) => {
+  dispatch({
+    type: UPDATE_COMMENTS, 
+    payload: comment,
+  });
+};
+
+
 
 // Async
 export const fetchPosts = (params) => async (dispatch) => {
@@ -146,6 +169,35 @@ export const editPost = (post) => async (dispatch) => {
   }
 }
 
+export const createComment = (postId, comment) => async (dispatch) => {
+  try {
+    const data = await api.createComment(postId, comment);
+
+    dispatch(updatePostComments(data.comment));
+
+    dispatch(setMessage({message: data.message}));
+
+  } catch (err) {
+    dispatch(setError(err));
+  }
+}
+
+export const getCommentsThread = (id, _id) => async (dispatch) => {
+  dispatch(setPostLoading(true))
+
+  try {
+    // const data = await api.getPostComments(id, _id);
+
+    // dispatch(fillComments(data));
+    dispatch(setPostLoading(false));
+
+  } catch (err) {
+    dispatch(setError(err));
+
+    dispatch(setPostLoading(false));
+  }
+};
+
 export default {
   fetchPosts,
   fillPosts,
@@ -158,4 +210,6 @@ export default {
   editPost,
   updatePost,
   clearPost,
+
+  createComment,
 }

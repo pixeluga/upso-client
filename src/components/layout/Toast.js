@@ -8,7 +8,6 @@ export default () => {
   const error = useSelector(state => state.posts.error);
   const message = useSelector(state => state.posts.message);
 
-
   const dispatch = useDispatch();
 
   const [errorView, setErrorView] = useState();
