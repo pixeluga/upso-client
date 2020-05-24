@@ -1,4 +1,5 @@
 import {
+  LOADING,
   POST_LOADING,
   CLEAR_POSTS,
   FETCH_POSTS,
@@ -10,21 +11,30 @@ import {
   EMIT_ERROR,
   CLEAN_ERROR,
 
+  UPDATE_ANSWERS,
   UPDATE_COMMENTS,
+  // FILL_COMMENTS,
+  DELETE_COMMENT,
 } from '../actions/types'
 
 const defaultState = {
   postsArray: [],
   post: {},
   isLoading: false,
+  isPostLoading: false,
 };
 
 export default (state = defaultState, action) => {
   switch (action.type) {
-    case POST_LOADING:
+    case LOADING:
       return {
         ...state,
         isLoading: action.payload
+      }
+    case POST_LOADING:
+      return {
+        ...state,
+        isPostLoading: action.payload
       }
     case CLEAR_POSTS:
       return {
@@ -55,12 +65,41 @@ export default (state = defaultState, action) => {
         post: action.payload,
         postsArray: [], // Posts - is another page, which will load all posts from server anyway
       };
-    case UPDATE_COMMENTS:
+    case UPDATE_ANSWERS:
       return {
         ...state,
         post: {
           ...state.post,
-          comments: [action.payload, ...state.post.comments],
+          answers: [action.payload, ...state.post.answers],
+        },
+      };
+    case UPDATE_COMMENTS:
+      // console.log('reducer', action.payload);
+      return {
+        ...state,
+        post: {
+          ...state.post,
+          comments: state.post.comments ? [action.payload, ...state.post.comments] : [action.payload],
+        },
+      };
+    // case FILL_COMMENTS:
+    //   return {
+    //     ...state,
+    //     post: {
+    //       ...state.post,
+    //       comments: newCommentsArr,
+    //     },
+    //   };
+    case DELETE_COMMENT:
+      const newAnswers = state.post.answers ? state.post.answers.filter((item) => item._id !== action.payload) : '';
+      const newComments = state.post.comments ? state.post.comments.filter((item) => item._id !== action.payload) : '';
+
+      return {
+        ...state,
+        post: {
+          ...state.post,
+          answers: newAnswers,
+          comments: newComments,
         },
       };
     case CLEAR_POST:

@@ -1,6 +1,7 @@
 import api from '../api';
 
 import { 
+  LOADING,
   FETCH_POSTS,
   POST_LOADING,
   CLEAR_POSTS,
@@ -14,14 +15,21 @@ import {
   CLEAN_ERROR,
   EMIT_MESSAGE,
 
-  FILL_COMMENTS,
+  UPDATE_ANSWERS,
+  // FILL_COMMENTS,
   UPDATE_COMMENTS,
+  DELETE_COMMENT,
 } from '../actions/types'
 
 // Sync
-export const setPostLoading = (isLoading) => ({
-  type: POST_LOADING,
+export const setLoading = (isLoading) => ({
+  type: LOADING,
   payload: isLoading
+});
+
+export const setPostLoading = (isPostLoading) => ({
+  type: POST_LOADING,
+  payload: isPostLoading
 });
 
 export const clearPosts = () => ({
@@ -86,19 +94,29 @@ export const addComment = (comment) => ({
   payload: comment,
 });
 
+export const deleteComment = (id) => ({
+  type: DELETE_COMMENT, 
+  payload: id,
+});
+
 export const fillComments = (data) => ({
-  type: FILL_COMMENTS, 
+  // type: FILL_COMMENTS, 
+  type: UPDATE_COMMENTS, 
   payload: data,
 });
 
+export const updatePostAnswers = (answer) => (dispatch) => {
+  dispatch({
+    type: UPDATE_ANSWERS, 
+    payload: answer,
+  });
+};
 export const updatePostComments = (comment) => (dispatch) => {
   dispatch({
     type: UPDATE_COMMENTS, 
     payload: comment,
   });
 };
-
-
 
 // Async
 export const fetchPosts = (params) => async (dispatch) => {
@@ -169,11 +187,24 @@ export const editPost = (post) => async (dispatch) => {
   }
 }
 
-export const createComment = (postId, comment) => async (dispatch) => {
+export const createAnswerOrComment = (flag, postId, comment) => async (dispatch) => {
+  const updatePostFun = flag === true ? updatePostComments : updatePostAnswers;
+
   try {
     const data = await api.createComment(postId, comment);
 
-    dispatch(updatePostComments(data.comment));
+    dispatch(updatePostFun(data.comment));
+
+    dispatch(setMessage({message: data.message}));
+
+  } catch (err) {
+    dispatch(setError(err));
+  }
+}
+
+export const removeComment = (postId, commentId) => async (dispatch) => {
+  try {
+    const data = await api.removeComment(postId, commentId);
 
     dispatch(setMessage({message: data.message}));
 
@@ -183,18 +214,18 @@ export const createComment = (postId, comment) => async (dispatch) => {
 }
 
 export const getCommentsThread = (id, _id) => async (dispatch) => {
-  dispatch(setPostLoading(true))
+  dispatch(setLoading(true))
 
   try {
-    // const data = await api.getPostComments(id, _id);
-
-    // dispatch(fillComments(data));
-    dispatch(setPostLoading(false));
+    const { parentId, comments } = await api.getCommentsThread(id, _id);
+    
+    dispatch(fillComments({ parentId, comments }));
+    dispatch(setLoading(false));
 
   } catch (err) {
     dispatch(setError(err));
 
-    dispatch(setPostLoading(false));
+    dispatch(setLoading(false));
   }
 };
 
@@ -211,5 +242,8 @@ export default {
   updatePost,
   clearPost,
 
-  createComment,
+  createAnswerOrComment,
+  removeComment,
+  deleteComment,
+  getCommentsThread,
 }

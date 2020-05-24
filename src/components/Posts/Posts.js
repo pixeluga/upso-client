@@ -14,7 +14,7 @@ import postsActions from '../../actions/posts';
 
 const mapStateToProps = (state) => ({
   currentUser: state.auth.user, 
-  isLoading: state.posts.isLoading,
+  isPostLoading: state.posts.isPostLoading,
   posts: state.posts.postsArray,
   totalCount: state.posts.total,
 });
@@ -55,13 +55,13 @@ class Posts extends Component {
   render() {
     const { 
       posts,
-      isLoading,
+      isPostLoading,
       currentUser,
       totalCount } = this.props;
 
     const totalItemsCount = totalCount ? totalCount : 0;
 
-    if (posts && !isLoading) {
+    if (posts && !isPostLoading) {
       const postsMap = posts.map( (post) => (
           <li className = 'list-group-item'
             key = { post._id } >

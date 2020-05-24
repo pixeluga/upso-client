@@ -1,3 +1,5 @@
+export const LOADING = 'LOADING';
+
 export const LOGIN = 'LOGIN';
 export const LOGOUT = 'LOGOUT';
 export const SET_CURRENT_USER = 'SET_CURRENT_USER';
@@ -14,8 +16,11 @@ export const DELETE_POST = 'DELETE_POST';
 export const UPDATE_POST = 'UPDATE_POST';
 export const CLEAR_POST = 'CLEAR_POST';
 
-export const FILL_COMMENTS = 'FILL_COMMENTS';
+export const UPDATE_ANSWERS = 'UPDATE_ANSWERS';
+
 export const UPDATE_COMMENTS = 'UPDATE_COMMENTS';
+export const FILL_COMMENTS = 'FILL_COMMENTS';
+export const DELETE_COMMENT = 'DELETE_COMMENT';
 
 export const EMIT_MESSAGE = 'EMIT_MESSAGE';
 export const EMIT_ERROR = 'EMIT_ERROR';

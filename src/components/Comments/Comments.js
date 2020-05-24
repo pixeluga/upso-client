@@ -1,15 +1,11 @@
 import React from 'react';
-import { useSelector } from 'react-redux';
 
 // Components
-import Comment from '../Comment';
+import { Comment } from '../../components';
 
-export default ({ _parentId = '' }) => {
-  const { comments } = useSelector(state => state.posts.post);
+export default ({ comments = [] }) => {
 
-  const commentsArr = comments ? comments : [];
-
-  const commentsMap = commentsArr.map((item) => (
+  const commentsMap = comments.map((item) => (
     <Comment key = { item._id } comment = { item } />)
   );
 

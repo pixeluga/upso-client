@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
@@ -10,6 +10,13 @@ export default ({onChange, body = ''}) => {
     setBody(e);
     onChange(e);
   }
+
+// Cleaning up the _body in ReactQuill
+  useEffect(() => {
+    if (!body) {
+      setBody();
+    }
+  }, [body])
 
   return (
     <ReactQuill

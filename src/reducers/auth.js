@@ -3,9 +3,6 @@ import {
 } from '../actions/types';
 
 const initialState = {
-  appLoaded: false,
-  token: null,
-
   isAuthenticated: false,
   user:   {},
 };

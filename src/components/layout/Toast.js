@@ -3,7 +3,6 @@ import { useSelector, useDispatch } from 'react-redux';
 
 import { cleanError } from '../../actions/posts';
 
-
 export default () => {
   const error = useSelector(state => state.posts.error);
   const message = useSelector(state => state.posts.message);
@@ -13,7 +12,6 @@ export default () => {
   const [errorView, setErrorView] = useState();
 
   const [messageView, setMessageView] = useState();
-
 
   useEffect(() => {
     if (error) {

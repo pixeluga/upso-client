@@ -11,36 +11,37 @@ import {
 } from '../../components/'
 
 // Actions
-import postsActions from '../../actions/posts';
+import {
+  getPostById,
+  clearPost
+} from '../../actions/posts';
 
 export default ({ match, history }) => {
-  const posts = useSelector(state => state.posts);
-
   const dispatch = useDispatch();
-      
   const bodyRef = useRef(null);
-
+  const posts = useSelector(state => state.posts);
+      
   const setPostBody = (body) => {
     bodyRef.current ? bodyRef.current.innerHTML = body : bodyRef.current = '';
   }
 
   useEffect(() => {
     if (match.params.id) {
-      dispatch(postsActions.getPostById(match.params.id, history));
+      dispatch(getPostById(match.params.id, history));
     }
   }, [dispatch, history, match.params.id]);
 
   useEffect(() => {
     setPostBody(posts.post.body);
-  }, [posts.post]);
+  }, [posts.post.body]);
 
   useEffect(() => {
     return () => {
-      dispatch(postsActions.clearPost());
+      dispatch(clearPost());
     }
   }, [dispatch])
 
-  return !posts.isLoading && posts.post !== '' ? (
+  return !posts.isPostLoading && posts.post !== '' ? (
     <>
       <Toast />
 
@@ -55,12 +56,12 @@ export default ({ match, history }) => {
 
         <div className = 'card-footer d-flex justify-content-end'>
             <Link to = { `/edit/${posts.post._id}` }
-              className = 'btn btn-light'>
+              className = 'btn btn-sm btn-light'>
               <i className = 'far fa-edit'></i> Edit post
             </Link>
             <button
               type = 'button'
-              className = 'btn btn-danger ml-2'>
+              className = 'btn btn-sm btn-danger ml-2'>
               <i className = 'fas fa-trash'></i> Delete post
             </button>
         </div>
@@ -68,7 +69,9 @@ export default ({ match, history }) => {
 
       <AddCommentForm />
 
-      <Comments />
+      <h3>31 Answers</h3>
+
+      <Comments parentId = 'post' comments = { posts.post.answers } />
     </>
-):  <Loader />
+):  <Loader title = 'post' />
 };

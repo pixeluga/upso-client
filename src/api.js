@@ -23,8 +23,8 @@ export default {
 
   getPost: async (id) => {
     const postRes = await axios.get(`${API_ROOT}/api/posts/${id}`);
-    const commentsRes = await axios.get(`${API_ROOT}/api/posts/${id}/comments`);
-    const posts = { ...postRes.data, comments: commentsRes.data }
+    const answersRes = await axios.get(`${API_ROOT}/api/posts/${id}/comments`);
+    const posts = { ...postRes.data, answers: answersRes.data }
     return posts;
   },
 
@@ -48,8 +48,13 @@ export default {
     return responseData(res);
   },
 
+  removeComment: async (postId, id) => {
+    const res = await axios.delete(`${API_ROOT}/api/posts/${postId}/comments/${id}`);
+    return responseData(res);
+  },
+
   getCommentsThread: async (id, _id) => {
-    const res = await axios.get(`${API_ROOT}/api/posts/${id}/comments/${_id}`);
+    const res = await axios.get(`${API_ROOT}/api/posts/${id}/comments/${_id}/comments`);
     return responseData(res);
   },
 };

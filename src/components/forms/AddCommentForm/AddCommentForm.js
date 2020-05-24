@@ -3,14 +3,11 @@ import { useSelector, useDispatch } from 'react-redux';
 
 import ReactQuillForm from '../ReactQuillForm';
 
-import { createComment } from '../../../actions/posts';
+import { createAnswerOrComment } from '../../../actions/posts';
 
 export default ({ parentId = '' }) => {
-  const { _id } = useSelector(state => state.posts.post);
-
   const dispatch = useDispatch();
-
-  const postId = _id;
+  const { _id } = useSelector(state => state.posts.post);
 
   const [body, setBody] = useState('');
 
@@ -20,13 +17,20 @@ export default ({ parentId = '' }) => {
 
   const submitForm = (e) => {
     e.preventDefault();
-    const comment = parentId ? { parentId, body } : { body };
-    dispatch(createComment(postId, comment));
-    setBody('');
+
+    if (!body || body === '<p><br></p>') {
+      // Need to insert something NORMAL like Toast with ERROR
+      alert('Body must be not empty!');
+    } else {
+      const flag = parentId ? true : false;
+      const comment = parentId ? { parentId, body } : { body };
+      dispatch(createAnswerOrComment(flag, _id, comment));
+      setBody('');
+    }
   };
 
   return (
-    <form className = 'mt-4' onSubmit = { submitForm }>
+    <form className = 'my-4' onSubmit = { submitForm }>
       <div className = 'form-group'>
         <label>Add your comment</label>
         <ReactQuillForm onChange = { onChangeQuill } body = { body }/>
